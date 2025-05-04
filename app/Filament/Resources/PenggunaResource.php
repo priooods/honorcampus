@@ -4,14 +4,20 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PenggunaResource\Pages;
 use App\Filament\Resources\PenggunaResource\RelationManagers;
+use App\Models\MUserRole;
 use App\Models\User;
 use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Pages\Page;
+use Filament\Resources\Pages\CreateRecord;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Illuminate\Support\Facades\Hash;
 
 class PenggunaResource extends Resource
 {
@@ -25,7 +31,38 @@ class PenggunaResource extends Resource
     {
         return $form
             ->schema([
-                //
+            function (Page $livewire) {
+                $fields = [
+                    TextInput::make('name')->label('Nama Pengguna')->placeholder('Masukan Nama Pengguna')->required(),
+                    TextInput::make('email')->email()->label('Email Pengguna')->placeholder('Masukan Email Pengguna')->required(),
+                    Select::make('m_user_roles_id')
+                        ->label('Pilih Role')
+                        ->relationship('Roles', 'title')
+                        ->placeholder('Cari nama Role')
+                        ->options(MUserRole::all()->pluck('title', 'id'))
+                        ->searchable()
+                        ->required()
+                        ->getSearchResultsUsing(fn(string $search): array => MUserRole::where('title', 'like', "%{$search}%")->limit(5)->pluck('title', 'id')->toArray())
+                        ->getOptionLabelUsing(fn($value): ?string => MUserRole::find($value)?->title),
+
+                ];
+
+                if ($livewire instanceof CreateRecord) {
+                    $fields[] = TextInput::make('password')->label('Password Akun')
+                        ->password()->revealable()
+                        ->dehydrateStateUsing(fn(string $state): string => Hash::make($state))
+                        ->same('passwordConfirmation')
+                        ->placeholder('Masukan Password')
+                        ->dehydrated(fn(?string $state): bool => filled($state))
+                        ->required()
+                        ->afterStateHydrated(function (TextInput $component, $state) {
+                            $component->state('');
+                        });
+                    $fields[] = TextInput::make('passwordConfirmation')->label('Confirmasi Password Akun')->password()->revealable()->placeholder('Masukan Password')->required();
+                }
+
+                return $fields;
+            }
             ]);
     }
 

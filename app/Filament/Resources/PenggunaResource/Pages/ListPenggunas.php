@@ -9,11 +9,13 @@ use Filament\Resources\Pages\ListRecords;
 class ListPenggunas extends ListRecords
 {
     protected static string $resource = PenggunaResource::class;
+    protected static ?string $title = 'Pengguna';
+    protected ?string $heading = 'Data Pengguna';
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('Tambah Pengguna'),
         ];
     }
 }
