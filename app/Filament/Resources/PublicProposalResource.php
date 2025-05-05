@@ -16,7 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PublicProposalResource extends Resource
 {
     protected static ?string $model = PublicProposal::class;
-
+    protected static ?string $navigationGroup = 'Mahasiswa';
+    protected static ?string $navigationLabel = 'Proposal';
+    protected static ?string $breadcrumb = "Proposal";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

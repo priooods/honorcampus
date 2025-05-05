@@ -16,7 +16,9 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PublicSkripsiResource extends Resource
 {
     protected static ?string $model = PublicSkripsi::class;
-
+    protected static ?string $navigationGroup = 'Mahasiswa';
+    protected static ?string $navigationLabel = 'Skripsi';
+    protected static ?string $breadcrumb = "Skripsi";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form

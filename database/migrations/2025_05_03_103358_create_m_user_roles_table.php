@@ -15,6 +15,15 @@ return new class extends Migration
             $table->integerIncrements('id');
             $table->string('title');
         });
+
+        DB::table('m_user_roles')->insert(
+            array(
+                ['title' => 'Dekan'],
+                ['title' => 'Kaprodi'],
+                ['title' => 'Dosen'],
+                ['title' => 'Admin'],
+            )
+        );
     }
 
     /**

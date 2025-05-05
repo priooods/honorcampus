@@ -15,6 +15,15 @@ return new class extends Migration
             $table->integerIncrements('id');
             $table->string('title');
         });
+
+        DB::table('m_status_tabs')->insert(
+            array(
+                ['title' => 'Aktif'],
+                ['title' => 'Tidak Aktif'],
+                ['title' => 'Disetujui'],
+                ['title' => 'Tidak Disetujui'],
+            )
+        );
     }
 
     /**
