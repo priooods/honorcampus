@@ -9,7 +9,8 @@ use Filament\Resources\Pages\EditRecord;
 class EditDosen extends EditRecord
 {
     protected static string $resource = DosenResource::class;
-
+    protected static ?string $title = 'Edit Dosen';
+    protected ?string $heading = 'Edit Dosen';
     protected function getHeaderActions(): array
     {
         return [

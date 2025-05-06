@@ -2,13 +2,13 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\DosenResource\Pages;
-use App\Filament\Resources\DosenResource\RelationManagers;
-use App\Models\MDosenTabs;
-use App\Models\User;
+use App\Filament\Resources\PeriodeResource\Pages;
+use App\Filament\Resources\PeriodeResource\RelationManagers;
+use App\Models\Periode;
+use App\Models\TPeriodeTab;
 use Filament\Actions\StaticAction;
 use Filament\Forms;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -20,30 +20,21 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class DosenResource extends Resource
+class PeriodeResource extends Resource
 {
-    protected static ?string $model = MDosenTabs::class;
+    protected static ?string $model = TPeriodeTab::class;
     protected static ?string $navigationGroup = 'Master';
-    protected static ?string $navigationLabel = 'Dosen';
-    protected static ?string $breadcrumb = "Dosen";
+    protected static ?string $navigationLabel = 'Periode';
+    protected static ?string $breadcrumb = "Periode";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                TextInput::make('name')->label('Nama Dosen')->placeholder('Masukan Nama Dosen')->required(),
-            TextInput::make('nidn')->numeric()->label('NIDN Dosen')->placeholder('Masukan NIDN Dosen')->required(),
-                TextInput::make('scope')->label('Bidang Keahlian Dosen')->placeholder('Masukan Keahlian Dosen')->required(),
-            Select::make('users_id')
-                ->label('Pilih Akun Dosen')
-                ->relationship('user', 'name')
-                ->placeholder('Cari akun dosen')
-                ->options(User::where('m_user_roles_id', 3)->pluck('name', 'id'))
-                ->searchable()
-                ->required()
-                ->getSearchResultsUsing(fn(string $search): array => User::where('name', 'like', "%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
-                ->getOptionLabelUsing(fn($value): ?string => User::find($value)?->name),
+                TextInput::make('title')->label('Nama Periode')->placeholder('Masukan Nama Periode')->required(),
+                DatePicker::make('start_date')->label('Waktu Mulai')->placeholder('Masukan Waktu')->native(false)->required(),
+                DatePicker::make('end_date')->label('Waktu Selesai')->placeholder('Masukan Waktu')->native(false)->required(),
             ]);
     }
 
@@ -51,12 +42,12 @@ class DosenResource extends Resource
     {
         return $table
             ->columns([
-                TextColumn::make('name')->label('Nama Dosen'),
-                TextColumn::make('nidn')->label('NIDN Dosen'),
-                TextColumn::make('scope')->label('Keahlian Dosen'),
-                TextColumn::make('m_status_tabs_id')->label('Status Dosen')->badge()->color(fn(string $state): string => match ($state) {
+                TextColumn::make('title')->label('Nama Periode'),
+                TextColumn::make('start_date')->label('Waktu Mulai')->date(),
+                TextColumn::make('end_date')->label('Waktu Selesai')->date(),
+                TextColumn::make('m_status_tabs_id')->label('Status Periode')->badge()->color(fn(string $state): string => match ($state) {
                     'Aktif' => 'success',
-                'Tidak Aktif' => 'danger',
+                    'Tidak Aktif' => 'danger',
                 })->getStateUsing(fn($record) => $record->status ? $record->status->title : 'Tidak Ada')
             ])
             ->filters([
@@ -76,8 +67,8 @@ class DosenResource extends Resource
                         ->icon('heroicon-o-check')
                         ->color('success')
                         ->requiresConfirmation()
-                        ->modalHeading('Aktifkan Status Dosen')
-                        ->modalDescription('Apakah anda yakin ingin mengaktifkan Status Dosen ?')
+                        ->modalHeading('Aktifkan Status Periode')
+                        ->modalDescription('Apakah anda yakin ingin mengaktifkan Status Periode ?')
                         ->modalSubmitActionLabel('Publish Sekarang')
                         ->modalCancelAction(fn(StaticAction $action) => $action->label('Batal')),
                     Action::make('unaktivated')
@@ -91,16 +82,15 @@ class DosenResource extends Resource
                         ->icon('heroicon-o-no-symbol')
                         ->color('danger')
                         ->requiresConfirmation()
-                        ->modalHeading('Non Aktifkan Dosen')
-                        ->modalDescription('Apakah anda yakin ingin mengnonaktifkan Dosen ?')
+                        ->modalHeading('Non Aktifkan Periode')
+                        ->modalDescription('Apakah anda yakin ingin mengnonaktifkan Periode ?')
                         ->modalSubmitActionLabel('Non Aktif Sekarang')
                         ->modalCancelAction(fn(StaticAction $action) => $action->label('Batal')),
-                    Tables\Actions\ViewAction::make()
                 ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
-                    // Tables\Actions\DeleteBulkAction::make()->modalHeading('Menghapus Informasi Dosen'),
+                    Tables\Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }
@@ -115,9 +105,9 @@ class DosenResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListDosens::route('/'),
-            'create' => Pages\CreateDosen::route('/create'),
-            'edit' => Pages\EditDosen::route('/{record}/edit'),
+            'index' => Pages\ListPeriodes::route('/'),
+            'create' => Pages\CreatePeriode::route('/create'),
+            'edit' => Pages\EditPeriode::route('/{record}/edit'),
         ];
     }
 }

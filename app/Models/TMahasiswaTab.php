@@ -16,4 +16,18 @@ class TMahasiswaTab extends Model
         'mentor_two',
         'm_status_tabs_id'
     ];
+
+    public function periode()
+    {
+        return $this->hasOne(TPeriodeTab::class, 'id', 't_periode_tabs');
+    }
+
+    public function pembimbing_one()
+    {
+        return $this->hasOne(MDosenTabs::class, 'id', 'mentor_one');
+    }
+    public function pembimbing_two()
+    {
+        return $this->hasOne(MDosenTabs::class, 'id', 'mentor_two');
+    }
 }

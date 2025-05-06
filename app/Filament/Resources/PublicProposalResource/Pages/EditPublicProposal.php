@@ -9,7 +9,8 @@ use Filament\Resources\Pages\EditRecord;
 class EditPublicProposal extends EditRecord
 {
     protected static string $resource = PublicProposalResource::class;
-
+    protected static ?string $title = 'Edit Proposal';
+    protected ?string $heading = 'Edit Proposal';
     protected function getHeaderActions(): array
     {
         return [

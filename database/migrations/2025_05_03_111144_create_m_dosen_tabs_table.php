@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('nidn');
             $table->string('scope')->comment('bidang keahlian');
             $table->unsignedInteger('m_status_tabs_id');
+            $table->unsignedBigInteger('users_id');
             $table->timestamps();
         });
     }

@@ -12,4 +12,9 @@ class TPeriodeTab extends Model
         'end_date',
         'm_status_tabs_id'
     ];
+
+    public function status()
+    {
+        return $this->hasOne(MStatusTab::class, 'id', 'm_status_tabs_id');
+    }
 }

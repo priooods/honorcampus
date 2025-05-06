@@ -22,6 +22,9 @@ return new class extends Migration
                 ['title' => 'Tidak Aktif'],
                 ['title' => 'Disetujui'],
                 ['title' => 'Tidak Disetujui'],
+                ['title' => 'Pengajuan'],
+                ['title' => 'Batal Pengajuan'],
+                ['title' => 'Draft'],
             )
         );
     }

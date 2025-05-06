@@ -9,11 +9,13 @@ use Filament\Resources\Pages\ListRecords;
 class ListPublicProposals extends ListRecords
 {
     protected static string $resource = PublicProposalResource::class;
+    protected static ?string $title = 'Proposal';
+    protected ?string $heading = 'Data Proposal';
 
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()->label('Tambah Proposal'),
         ];
     }
 }
