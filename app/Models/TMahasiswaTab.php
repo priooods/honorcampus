@@ -10,10 +10,9 @@ class TMahasiswaTab extends Model
         't_periode_tabs',
         'name',
         'nim',
+        'prodi',
         'status_proposal',
         'status_skripsi',
-        'mentor_one',
-        'mentor_two',
         'm_status_tabs_id'
     ];
 
@@ -21,10 +20,13 @@ class TMahasiswaTab extends Model
     {
         return $this->hasOne(TPeriodeTab::class, 'id', 't_periode_tabs');
     }
-
-    public function pembimbing_one()
+    public function status()
     {
-        return $this->hasOne(MDosenTabs::class, 'id', 'mentor_one');
+        return $this->hasOne(MStatusTab::class, 'id', 'm_status_tabs_id');
+    }
+    public function honor()
+    {
+        return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id');
     }
     public function pembimbing_two()
     {

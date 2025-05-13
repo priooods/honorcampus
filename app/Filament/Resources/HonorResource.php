@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\HonorResource\Pages;
 use App\Filament\Resources\HonorResource\RelationManagers;
 use App\Models\Honor;
+use App\Models\THonorTab;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -15,7 +16,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class HonorResource extends Resource
 {
-    protected static ?string $model = Honor::class;
+    protected static ?string $model = THonorTab::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 

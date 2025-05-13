@@ -54,6 +54,9 @@ class PenggunaResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->query(
+                User::whereNot('id', auth()->user()->id)
+            )
             ->columns([
             TextColumn::make('name')->label('Nama Pengguna'),
             TextColumn::make('email')->label('Email Pengguna'),
@@ -63,7 +66,7 @@ class PenggunaResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+            Tables\Actions\EditAction::make()->visible(auth()->user()->m_user_roles_id === 4),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

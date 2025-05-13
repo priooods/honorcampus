@@ -96,7 +96,7 @@ class DosenResource extends Resource
                         ->modalSubmitActionLabel('Non Aktif Sekarang')
                         ->modalCancelAction(fn(StaticAction $action) => $action->label('Batal')),
                     Tables\Actions\ViewAction::make()
-                ])
+            ])->visible(auth()->user()->m_user_roles_id === 4)
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

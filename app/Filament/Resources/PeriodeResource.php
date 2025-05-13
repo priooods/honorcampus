@@ -86,7 +86,7 @@ class PeriodeResource extends Resource
                         ->modalDescription('Apakah anda yakin ingin mengnonaktifkan Periode ?')
                         ->modalSubmitActionLabel('Non Aktif Sekarang')
                         ->modalCancelAction(fn(StaticAction $action) => $action->label('Batal')),
-                ])
+            ])->visible(auth()->user()->m_user_roles_id === 4)
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

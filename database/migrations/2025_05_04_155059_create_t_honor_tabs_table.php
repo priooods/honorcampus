@@ -14,9 +14,10 @@ return new class extends Migration
         Schema::create('t_honor_tabs', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('t_mahasiswa_tabs');
-            $table->unsignedBigInteger('penguji_satu')->nullable();
-            $table->unsignedBigInteger('penguji_dua')->nullable();
-            $table->unsignedBigInteger('penguji_tiga')->nullable();
+            $table->integer('sequent')->nullable();
+            $table->unsignedBigInteger('m_dosen_tabs_id')->nullable();
+            $table->unsignedInteger('m_type_request_id')->nullable();
+            $table->unsignedInteger('m_type_request_id_detail')->nullable();
             $table->bigInteger('honor')->default(0);
             $table->timestamps();
         });
