@@ -15,7 +15,7 @@ class ListPenggunas extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Tambah Pengguna'),
+            Actions\CreateAction::make()->label('Tambah Pengguna')->visible(auth()->user()->m_user_roles_id === 4),
         ];
     }
 }

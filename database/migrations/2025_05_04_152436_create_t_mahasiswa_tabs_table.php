@@ -17,8 +17,10 @@ return new class extends Migration
             $table->string('name');
             $table->string('nim');
             $table->string('prodi');
-            $table->tinyInteger('status_proposal')->default(0)->comment('0 = belum bayar');
-            $table->tinyInteger('status_skripsi')->default(0)->comment('0 = belum bayar');
+            $table->tinyInteger('status_bimbingan_proposal')->default(0)->comment('0 = belum bayar');
+            $table->tinyInteger('status_sidang_proposal')->default(0)->comment('0 = belum bayar');
+            $table->tinyInteger('status_bimbingan_skripsi')->default(0)->comment('0 = belum bayar');
+            $table->tinyInteger('status_sidang_skripsi')->default(0)->comment('0 = belum bayar');
             $table->unsignedInteger('m_status_tabs_id');
             $table->timestamps();
         });

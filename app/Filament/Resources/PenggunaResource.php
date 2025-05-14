@@ -71,7 +71,7 @@ class PenggunaResource extends Resource
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     Tables\Actions\DeleteBulkAction::make(),
-                ]),
+            ])->visible(auth()->user()->m_user_roles_id === 4),
             ]);
     }
 

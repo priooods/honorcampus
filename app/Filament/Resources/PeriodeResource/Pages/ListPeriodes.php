@@ -15,7 +15,7 @@ class ListPeriodes extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Tambah Periode'),
+            Actions\CreateAction::make()->label('Tambah Periode')->visible(auth()->user()->m_user_roles_id === 4),
         ];
     }
 }

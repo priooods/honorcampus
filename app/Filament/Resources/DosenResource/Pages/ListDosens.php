@@ -15,7 +15,7 @@ class ListDosens extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make()->label('Tambah Dosen'),
+            Actions\CreateAction::make()->label('Tambah Dosen')->visible(auth()->user()->m_user_roles_id === 4),
         ];
     }
 }

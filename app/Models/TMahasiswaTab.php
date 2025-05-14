@@ -11,8 +11,10 @@ class TMahasiswaTab extends Model
         'name',
         'nim',
         'prodi',
-        'status_proposal',
-        'status_skripsi',
+        'status_bimbingan_proposal',
+        'status_sidang_proposal',
+        'status_bimbingan_skripsi',
+        'status_sidang_skripsi',
         'm_status_tabs_id'
     ];
 

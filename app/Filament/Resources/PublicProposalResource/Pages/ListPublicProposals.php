@@ -25,9 +25,9 @@ class ListPublicProposals extends ListRecords
     {
         return [
             'bimbingan' => Tab::make('Bimbingan')
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('status_proposal', 1)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereIn('m_status_tabs_id', [3, 4, 5, 6, 7, 8])->where('status_bimbingan_proposal', 1)),
             'sidang' => Tab::make('Sidang')
-                ->modifyQueryUsing(fn(Builder $query) => $query->where('status_proposal', 0)),
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereIn('m_status_tabs_id', [9])->where('status_sidang_proposal', 1)),
         ];
     }
 }
