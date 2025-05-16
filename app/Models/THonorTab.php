@@ -14,4 +14,9 @@ class THonorTab extends Model
         'm_type_request_id',
         'm_type_request_id_detail',
     ];
+
+    public function mahasiswa()
+    {
+        return $this->hasOne(TMahasiswaTab::class, 'id', 't_mahasiswa_tabs');
+    }
 }

@@ -28,6 +28,12 @@ class DosenResource extends Resource
     protected static ?string $breadcrumb = "Dosen";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if (auth()->user()->m_user_roles_id == 4) return true;
+        else return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form

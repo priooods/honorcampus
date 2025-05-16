@@ -25,6 +25,10 @@ return new class extends Migration
                 ['title' => 'Pengajuan'],
                 ['title' => 'Batal Pengajuan'],
                 ['title' => 'Draft'],
+                ['title' => 'Bimbingan Proposal'],
+                ['title' => 'Sidang Proposal'],
+                ['title' => 'Bimbingan Skripsi'],
+                ['title' => 'Sidang Skripsi'],
             )
         );
     }

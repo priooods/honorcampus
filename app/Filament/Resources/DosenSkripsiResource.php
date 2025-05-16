@@ -5,21 +5,34 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DosenSkripsiResource\Pages;
 use App\Filament\Resources\DosenSkripsiResource\RelationManagers;
 use App\Models\DosenSkripsi;
+use App\Models\THonorTab;
 use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class DosenSkripsiResource extends Resource
 {
-    protected static ?string $model = DosenSkripsi::class;
+    protected static ?string $model = THonorTab::class;
     protected static ?string $navigationGroup = 'Dosen';
     protected static ?string $navigationLabel = 'Skripsi';
     protected static ?string $breadcrumb = "Skripsi";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    public static function shouldRegisterNavigation(): bool
+    {
+        if (auth()->user()->m_user_roles_id == 3) return true;
+        else return false;
+    }
+
+    public function getDefaultActiveTab(): string | int | null
+    {
+        return 'bimbingan';
+    }
 
     public static function form(Form $form): Form
     {
@@ -33,17 +46,20 @@ class DosenSkripsiResource extends Resource
     {
         return $table
             ->columns([
-                //
+            TextColumn::make('t_mahasiswa_tabs')->label('Nama Mahasiswa')
+                ->getStateUsing(fn($record) => $record->mahasiswa ? $record->mahasiswa->name : '-'),
+            TextColumn::make('nim')->label('NPM Mahasiswa')
+                ->getStateUsing(fn($record) => $record->mahasiswa ? $record->mahasiswa->nim : '-'),
+            TextColumn::make('sequent')->label('Pembimbing/Penguji'),
+            TextColumn::make('honor')->label('Honor')
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+            Tables\Actions\BulkActionGroup::make([
                 ]),
             ]);
     }

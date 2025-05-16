@@ -32,6 +32,12 @@ class PublicSkripsiResource extends Resource
     protected static ?string $breadcrumb = "Skripsi";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        if (auth()->user()->m_user_roles_id != 3) return true;
+        else return false;
+    }
+
     public static function form(Form $form): Form
     {
         return $form
@@ -110,7 +116,7 @@ class PublicSkripsiResource extends Resource
                                     'm_dosen_tabs_id' => $item,
                                     'm_type_request_id' => 2,
                                     'm_type_request_id_detail' => 4,
-                                    'sequent' => (int)$i + 2,
+                                'sequent' => (int)$i + 1,
                                 ]);
                             }
                         }
