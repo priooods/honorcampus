@@ -256,7 +256,7 @@ class PublicProposalResource extends Resource
                         'status_bimbingan_skripsi' => 1,
                         ]);
                     })
-                    ->visible(fn($record) =>  $record->m_status_tabs_id === 9  && auth()->user()->m_user_roles_id === 4)
+                    ->visible(fn($record) =>  $record->m_status_tabs_id === 9  && (auth()->user()->m_user_roles_id === 4 || auth()->user()->m_user_roles_id === 2))
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->requiresConfirmation()

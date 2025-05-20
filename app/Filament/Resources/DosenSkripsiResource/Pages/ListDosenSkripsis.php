@@ -25,11 +25,11 @@ class ListDosenSkripsis extends ListRecords
         return [
             'bimbingan' => Tab::make('Bimbingan')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('m_type_request_id', 2)
-                    ->where('m_dosen_tabs_id', MDosenTabs::where('users_id', auth()->user()->id)->value('id'))
+                ->where('m_dosen_tabs_id', 6)
                     ->where('m_type_request_id_detail', 3)),
             'sidang' => Tab::make('Sidang')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('m_type_request_id', 2)
-                    ->where('m_dosen_tabs_id', MDosenTabs::where('users_id', auth()->user()->id)->value('id'))
+                ->where('m_dosen_tabs_id', 6)
                     ->where('m_type_request_id_detail', 4)),
         ];
     }
