@@ -16,7 +16,6 @@ class CreateDosen extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['m_status_tabs_id'] = 1;
-        $data['users_id'] = 1;
         return $data;
     }
 

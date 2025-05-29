@@ -29,6 +29,11 @@ class User extends Authenticatable
         return $this->hasOne(MUserRole::class, 'id', 'm_user_roles_id');
     }
 
+    public function dosen()
+    {
+        return $this->hasOne(MDosenTabs::class, 'users_id', 'id');
+    }
+
     /**
      * The attributes that should be hidden for serialization.
      *

@@ -26,11 +26,11 @@ class ListDosenProposals extends ListRecords
         return [
             'bimbingan' => Tab::make('Bimbingan')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('m_type_request_id', 1)
-                ->where('m_dosen_tabs_id', 6)
+                ->where('m_dosen_tabs_id', auth()->user()->dosen->id)
                     ->where('m_type_request_id_detail', 3)),
             'sidang' => Tab::make('Sidang')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('m_type_request_id', 1)
-                ->where('m_dosen_tabs_id', 6)
+                ->where('m_dosen_tabs_id', auth()->user()->dosen->id)
                     ->where('m_type_request_id_detail', 4)),
         ];
     }
