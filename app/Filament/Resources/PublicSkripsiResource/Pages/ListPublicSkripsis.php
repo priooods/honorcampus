@@ -7,7 +7,9 @@ use Filament\Actions;
 use Filament\Resources\Components\Tab;
 use Filament\Resources\Pages\ListRecords;
 use Illuminate\Contracts\Database\Eloquent\Builder;
-
+use pxlrbt\FilamentExcel\Actions\Pages\ExportAction as PagesExportAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 class ListPublicSkripsis extends ListRecords
 {
     protected static string $resource = PublicSkripsiResource::class;
@@ -16,7 +18,33 @@ class ListPublicSkripsis extends ListRecords
 
     protected function getHeaderActions(): array
     {
-        return [];
+        return [
+            PagesExportAction::make()->color('success')->exports([
+                ExcelExport::make()->withColumns([
+                    Column::make('t_periode_tabs')->formatStateUsing(
+                        fn($record) => $record->periode->title
+                    ),
+                    Column::make('name'),
+                    Column::make('nim'),
+                    Column::make('prodi'),
+                    Column::make('pem_skripsi')->heading('Pembimbing Skripsi')->formatStateUsing(
+                        fn($record) => $record->pem_skripsi->dosen->name
+                    ),
+                    Column::make('sid_skripsi')->heading('Sidang Proposal')->formatStateUsing(
+                        function ($record) {
+                            $up = array();
+                            foreach ($record->sid_skripsi as $value) {
+                                array_push($up, $value->dosen->name);
+                            }
+                            return implode(',', $up);
+                        }
+                    ),
+                    Column::make('m_status_tabs_id')->formatStateUsing(
+                        fn($record) => $record->status->title
+                    ),
+                ])->withFilename('Progress Skripsi'),
+            ]),
+        ];
     }
 
     public function getTabs(): array

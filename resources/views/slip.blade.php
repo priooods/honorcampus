@@ -7,7 +7,7 @@
     <title>Slip Gaji - {{ $data->dosen->name }}</title>
 </head>
 <body>
-    <h1 style="text-align: center; font-weight:bold; font-size: 2rem; margin-bottom: 1.5rem">Slip Gaji</h1>
+    <h1 style="text-align: center; font-weight:bold; font-size: 1rem; margin-bottom: 1.5rem">Slip Honor Bimbingan & Seminar Proposal Skripsi</h1>
     <table style="
         width: 100%; 
         border-collapse: collapse; 
