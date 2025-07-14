@@ -58,12 +58,8 @@ class DosenSkripsiResource extends Resource
                 //
             ])
             ->actions([
-            Action::make('honor')->label('Cetak')->action(function (array $data, THonorTab $record) {
-                //
-            })
-                ->icon('heroicon-o-check')
-                ->color('success'),
-            ])
+            Action::make('pdf')->visible(fn($record) => $record->honor !== 0)->label('Print')->icon('heroicon-o-check')->color('danger')->url(fn(THonorTab $record): string => route('pdf.report', ['id' => $record]), shouldOpenInNewTab: true)
+        ])
             ->bulkActions([
             Tables\Actions\BulkActionGroup::make([
                 ]),

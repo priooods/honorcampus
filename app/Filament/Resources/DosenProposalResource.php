@@ -15,6 +15,9 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use pxlrbt\FilamentExcel\Actions\Tables\ExportAction;
+use pxlrbt\FilamentExcel\Columns\Column;
+use pxlrbt\FilamentExcel\Exports\ExcelExport;
 
 class DosenProposalResource extends Resource
 {
@@ -58,12 +61,8 @@ class DosenProposalResource extends Resource
                 //
             ])
             ->actions([
-            Action::make('honor')->label('Cetak')->action(function (array $data, THonorTab $record) {
-                //
-            })
-                ->icon('heroicon-o-check')
-                ->color('success'),
-            ])
+            Action::make('pdf')->visible(fn($record) => $record->honor !== 0)->label('Print')->icon('heroicon-o-check')->color('danger')->url(fn(THonorTab $record): string => route('pdf.report', ['id' => $record]), shouldOpenInNewTab: true)
+        ])
             ->bulkActions([
             Tables\Actions\BulkActionGroup::make([
                 ]),
