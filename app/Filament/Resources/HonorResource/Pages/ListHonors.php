@@ -11,8 +11,8 @@ use Illuminate\Contracts\Database\Eloquent\Builder;
 class ListHonors extends ListRecords
 {
     protected static string $resource = HonorResource::class;
-    protected static ?string $title = 'Honor';
-    protected ?string $heading = 'Data Honor';
+    protected static ?string $title = 'Keuangan';
+    protected ?string $heading = 'Data Keuangan';
     protected function getHeaderActions(): array
     {
         return [];

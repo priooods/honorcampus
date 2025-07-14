@@ -21,8 +21,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class HonorResource extends Resource
 {
     protected static ?string $model = THonorTab::class;
-    protected static ?string $navigationLabel = 'Honor Dosen';
-    protected static ?string $breadcrumb = "Honor Dosen";
+    protected static ?string $navigationLabel = 'Data Keuangan';
+    protected static ?string $breadcrumb = "Data Keuangan";
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function shouldRegisterNavigation(): bool
