@@ -39,12 +39,14 @@ class HonorResource extends Resource
             ]);
     }
 
+    public function getDefaultActiveTab(): string | int | null
+    {
+        return 'before';
+    }
+
     public static function table(Table $table): Table
     {
-        return $table->query(
-            THonorTab::where('honor', 0)
-        )
-            ->columns([
+        return $table->columns([
             TextColumn::make('m_dosen_tabs_id')->label('Nama Dosen')->getStateUsing(fn($record) => $record->dosen ? $record->dosen->name : '-'),
             TextColumn::make('mahasiswa')->label('Nama Mahasiswa')
                 ->getStateUsing(fn($record) => $record->mahasiswa ? $record->mahasiswa->name : '-')
@@ -77,7 +79,7 @@ class HonorResource extends Resource
                 $record->update([
                     'honor' => $data['honor'],
                 ]);
-            })
+            })->visible(fn($record) => $record->honor === 0)
                 ->form([
                     TextInput::make('honor')->numeric()->label('Honor Dosen')->placeholder('Masukan Honor Dosen')->required(),
                 ])
@@ -88,6 +90,7 @@ class HonorResource extends Resource
                 ->modalDescription('Masukan honor yang ingin diberikan untuk Dosen')
                 ->modalSubmitActionLabel('Simpan')
                 ->modalCancelAction(fn(StaticAction $action) => $action->label('Batal')),
+            Action::make('pdf')->visible(fn($record) => $record->honor !== 0)->label('Print')->icon('heroicon-o-check')->color('danger')->url(fn(THonorTab $record): string => route('pdf.report', ['id' => $record]), shouldOpenInNewTab: true)
             ]);
     }
 
