@@ -8,6 +8,7 @@
 </head>
 <body>
     <h1 style="text-align: center; font-weight:bold; font-size: 1rem; margin-bottom: 1.5rem">Slip Honor Bimbingan & Seminar Proposal Skripsi</h1>
+    <p style="text-align: start; font-weight:bold; font-size: 15ps; margin-bottom: 1rem">{{$data->dosen->name}}</p>
     <table style="
         width: 100%; 
         border-collapse: collapse; 
