@@ -23,25 +23,40 @@ class ListPublicProposals extends ListRecords
         return [
             PagesExportAction::make()->color('success')->exports([
                 ExcelExport::make()->withColumns([
-                    Column::make('t_periode_tabs')->formatStateUsing(
+                    Column::make('t_periode_tabs')->heading('Periode')->formatStateUsing(
                         fn($record) => $record->periode->title
                     ),
-                    Column::make('name'),
-                    Column::make('nim'),
-                    Column::make('prodi'),
+                    Column::make('name')->heading('Nama Mahasiswa/i'),
+                    Column::make('nim')->heading('NIM'),
+                    Column::make('prodi')->heading('Prodi'),
                     Column::make('pem_proposal')->heading('Pembimbing Proposal')->formatStateUsing(
                         fn($record) => $record->pem_proposal->dosen->name
                     ),
-                    Column::make('sid_proposal')->heading('Sidang Proposal')->formatStateUsing(
+                    Column::make('sid_proposal')->heading('Penguji 1')->formatStateUsing(
                         function ($record) {
-                            $up = array();
-                            foreach ($record->sid_proposal as $value) {
-                                array_push($up, $value->dosen->name);
-                            }
-                            return implode(',', $up);
+                            if (isset($record->sid_proposal[0]))
+                                return $record->sid_proposal[0]->dosen->name;
+                            else
+                                return '';
                         }
                     ),
-                    Column::make('m_status_tabs_id')->formatStateUsing(
+                    Column::make('sid_proposal')->heading('Penguji 2')->formatStateUsing(
+                        function ($record) {
+                            if (isset($record->sid_proposal[1]))
+                                return $record->sid_proposal[1]->dosen->name;
+                            else
+                                return '';
+                        }
+                    ),
+                    Column::make('sid_proposal')->heading('Penguji 3')->formatStateUsing(
+                        function ($record) {
+                            if (isset($record->sid_proposal[2]))
+                                return $record->sid_proposal[2]->dosen->name;
+                            else
+                                return '';
+                        }
+                    ),
+                    Column::make('m_status_tabs_id')->heading('Status')->formatStateUsing(
                         fn($record) => $record->status->title
                     ),
                 ])->withFilename('Progress Proposal'),

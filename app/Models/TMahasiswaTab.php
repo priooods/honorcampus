@@ -15,6 +15,8 @@ class TMahasiswaTab extends Model
         'status_sidang_proposal',
         'status_bimbingan_skripsi',
         'status_sidang_skripsi',
+        'progres_bimbingan_proposal',
+        'progres_bimbingan_skripsi',
         'm_status_tabs_id'
     ];
 

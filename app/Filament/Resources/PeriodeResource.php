@@ -9,6 +9,7 @@ use App\Models\TPeriodeTab;
 use Filament\Actions\StaticAction;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -38,7 +39,13 @@ class PeriodeResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('title')->label('Nama Periode')->placeholder('Masukan Nama Periode')->required(),
+            Select::make('title')
+                ->placeholder('Pilih Periode')
+                ->label('Pilih Periode')
+                ->options([
+                    'Semester Ganjil' => 'Semester Ganjil',
+                    'Semester Genap' => 'Semester Genap',
+                ])->required(),
                 DatePicker::make('start_date')->label('Waktu Mulai')->placeholder('Masukan Waktu')->native(false)->required(),
                 DatePicker::make('end_date')->label('Waktu Selesai')->placeholder('Masukan Waktu')->native(false)->required(),
             ]);

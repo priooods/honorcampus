@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PenggunaResource\Pages;
 use App\Models\MUserRole;
 use App\Models\User;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -32,8 +33,11 @@ class PenggunaResource extends Resource
     {
         return $form
             ->schema([
+            Group::make([
             TextInput::make('name')->label('Nama Pengguna')->placeholder('Masukan Nama Pengguna')->required(),
-            TextInput::make('email')->email()->label('Email Pengguna')->placeholder('Masukan Email Pengguna')->required(),
+                TextInput::make('email')->email()->label('Email Pengguna')->placeholder('Masukan Email Pengguna')->required()->unique(column: 'email')->validationMessages([
+                    'unique' => 'Email yang anda masukan sudah terdaftar',
+                ]),
             Select::make('m_user_roles_id')
                 ->label('Pilih Role')
                 ->relationship('Roles', 'title')
@@ -54,6 +58,7 @@ class PenggunaResource extends Resource
                     $component->state('');
                     }),
                 TextInput::make('passwordConfirmation')->label('Confirmasi Password Akun')->password()->revealable()->placeholder('Masukan Password')->required()
+            ])->columns(1)
             ]);
     }
 

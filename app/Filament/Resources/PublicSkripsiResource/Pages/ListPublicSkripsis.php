@@ -21,25 +21,40 @@ class ListPublicSkripsis extends ListRecords
         return [
             PagesExportAction::make()->color('success')->exports([
                 ExcelExport::make()->withColumns([
-                    Column::make('t_periode_tabs')->formatStateUsing(
+                    Column::make('t_periode_tabs')->heading('Periode')->formatStateUsing(
                         fn($record) => $record->periode->title
                     ),
-                    Column::make('name'),
-                    Column::make('nim'),
-                    Column::make('prodi'),
+                    Column::make('name')->heading('Nama Mahasiswa/i'),
+                    Column::make('nim')->heading('NIM'),
+                    Column::make('prodi')->heading('Prodi'),
                     Column::make('pem_skripsi')->heading('Pembimbing Skripsi')->formatStateUsing(
                         fn($record) => $record->pem_skripsi->dosen->name
                     ),
-                    Column::make('sid_skripsi')->heading('Sidang Proposal')->formatStateUsing(
+                    Column::make('sid_skripsi')->heading('Penguji 1')->formatStateUsing(
                         function ($record) {
-                            $up = array();
-                            foreach ($record->sid_skripsi as $value) {
-                                array_push($up, $value->dosen->name);
-                            }
-                            return implode(',', $up);
+                            if (isset($record->sid_skripsi[0]))
+                                return $record->sid_skripsi[0]->dosen->name;
+                            else
+                                return '';
                         }
                     ),
-                    Column::make('m_status_tabs_id')->formatStateUsing(
+                    Column::make('sid_skripsi')->heading('Penguji 2')->formatStateUsing(
+                        function ($record) {
+                            if (isset($record->sid_skripsi[1]))
+                                return $record->sid_skripsi[1]->dosen->name;
+                            else
+                                return '';
+                        }
+                    ),
+                    Column::make('sid_skripsi')->heading('Penguji 3')->formatStateUsing(
+                        function ($record) {
+                            if (isset($record->sid_skripsi[2]))
+                                return $record->sid_skripsi[2]->dosen->name;
+                            else
+                                return '';
+                        }
+                    ),
+                    Column::make('m_status_tabs_id')->heading('Status')->formatStateUsing(
                         fn($record) => $record->status->title
                     ),
                 ])->withFilename('Progress Skripsi'),

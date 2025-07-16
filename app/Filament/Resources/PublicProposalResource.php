@@ -9,7 +9,9 @@ use App\Models\TMahasiswaTab;
 use App\Models\TPeriodeTab;
 use App\Models\User;
 use Filament\Actions\StaticAction;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -40,25 +42,27 @@ class PublicProposalResource extends Resource
     {
         return $form
             ->schema([
-            Select::make('t_periode_tabs')
-                ->label('Pilih Periode')
-                ->relationship('periode', 'title')
-                ->placeholder('Cari Periode')
-                ->options(TPeriodeTab::where('m_status_tabs_id', 1)->pluck('title', 'id'))
-                ->searchable()
-                ->required()
-                ->getSearchResultsUsing(fn(string $search): array => TPeriodeTab::where('title', 'like', "%{$search}%")->limit(5)->pluck('title', 'id')->toArray())
-                ->getOptionLabelUsing(fn($value): ?string => TPeriodeTab::find($value)?->title),
-            TextInput::make('name')->label('Nama Mahasiswa')->placeholder('Masukan Nama Mahasiswa')->required(),
-            TextInput::make('nim')->label('NPM')->numeric()->placeholder('Masukan NPM')->required(),
-            TextInput::make('prodi')->label('Prodi Mahasiswa')->placeholder('Masukan Prodi Mahasiswa')->required(),
-            Select::make('status_bimbingan_proposal')
-                ->placeholder('Pilih Status Pembayaran')
-                ->label('Status Pembayaran Proposal')
-                ->options([
-                    0 => 'Belum Lunas',
-                    1 => 'Lunas',
-                ])
+            Group::make([
+                Select::make('t_periode_tabs')
+                    ->label('Pilih Periode')
+                    ->relationship('periode', 'title')
+                    ->placeholder('Cari Periode')
+                    ->options(TPeriodeTab::where('m_status_tabs_id', 1)->pluck('title', 'id'))
+                    ->searchable()
+                    ->required()
+                    ->getSearchResultsUsing(fn(string $search): array => TPeriodeTab::where('title', 'like', "%{$search}%")->limit(5)->pluck('title', 'id')->toArray())
+                    ->getOptionLabelUsing(fn($value): ?string => TPeriodeTab::find($value)?->title),
+                TextInput::make('name')->label('Nama Mahasiswa')->placeholder('Masukan Nama Mahasiswa')->required(),
+                TextInput::make('nim')->label('NPM')->numeric()->placeholder('Masukan NPM')->required(),
+                TextInput::make('prodi')->label('Prodi Mahasiswa')->placeholder('Masukan Prodi Mahasiswa')->required(),
+                Select::make('status_bimbingan_proposal')
+                    ->placeholder('Pilih Status Pembayaran')
+                    ->label('Status Pembayaran Proposal')
+                    ->options([
+                        0 => 'Belum Lunas',
+                        1 => 'Lunas',
+                    ])
+            ])->columns(1)
             ]);
     }
 
@@ -208,6 +212,7 @@ class PublicProposalResource extends Resource
                         $record->update([
                             'm_status_tabs_id' => 9,
                             'status_sidang_proposal' => 1,
+                        'progres_bimbingan_proposal' => 1,
                         ]);
                     })
                     ->visible(fn($record) =>  $record->m_status_tabs_id === 8  && auth()->user()->m_user_roles_id === 2)
@@ -255,6 +260,7 @@ class PublicProposalResource extends Resource
                         $record->update([
                         'm_status_tabs_id' => 10,
                         'status_bimbingan_skripsi' => 1,
+                        'progres_bimbingan_skripsi' => 0,
                         ]);
                     })
                     ->visible(fn($record) =>  $record->m_status_tabs_id === 9  && (auth()->user()->m_user_roles_id === 4 || auth()->user()->m_user_roles_id === 2))

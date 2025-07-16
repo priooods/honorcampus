@@ -123,6 +123,7 @@ class PublicSkripsiResource extends Resource
                         $record->update([
                             'm_status_tabs_id' => 11,
                             'status_sidang_skripsi' => 1,
+                        'progres_bimbingan_skripsi' => 1,
                         ]);
                     })
                     ->visible(fn($record) =>  $record->m_status_tabs_id === 10  && auth()->user()->m_user_roles_id === 2)

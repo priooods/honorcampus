@@ -16,6 +16,7 @@ class CreatePublicProposal extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['m_status_tabs_id'] = 7;
+        $data['progres_bimbingan_proposal'] = 0;
         return $data;
     }
 

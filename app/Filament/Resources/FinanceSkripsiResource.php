@@ -49,6 +49,10 @@ class FinanceSkripsiResource extends Resource
                 'Belum Lunas' => 'danger',
                 'Lunas' => 'success',
             })->getStateUsing(fn($record) => $record->status_bimbingan_proposal ? 'Lunas' : 'Belum Lunas'),
+            TextColumn::make('progres_bimbingan_skripsi')->label('Status Skripsi')->badge()->color(fn(string $state): string => match ($state) {
+                'Progress' => 'info',
+                'Selesai' => 'success',
+            })->getStateUsing(fn($record) => $record->progres_bimbingan_skripsi === 0 ? 'Progress' : 'Selesai'),
             ])
             ->filters([
                 //

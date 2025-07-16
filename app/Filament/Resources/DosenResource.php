@@ -8,6 +8,7 @@ use App\Models\MDosenTabs;
 use App\Models\User;
 use Filament\Actions\StaticAction;
 use Filament\Forms;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -38,8 +39,11 @@ class DosenResource extends Resource
     {
         return $form
             ->schema([
+            Group::make([
                 TextInput::make('name')->label('Nama Dosen')->placeholder('Masukan Nama Dosen')->required(),
-            TextInput::make('nidn')->numeric()->label('NIDN Dosen')->placeholder('Masukan NIDN Dosen')->required(),
+                TextInput::make('nidn')->numeric()->label('NIDN Dosen')->placeholder('Masukan NIDN Dosen')->required()->unique(column: 'nidn')->validationMessages([
+                    'unique' => 'NIDN yang anda masukan sudah terdaftar',
+                ]),
                 TextInput::make('scope')->label('Bidang Keahlian Dosen')->placeholder('Masukan Keahlian Dosen')->required(),
             Select::make('users_id')
                 ->label('Pilih Akun Dosen')
@@ -50,6 +54,7 @@ class DosenResource extends Resource
                 ->required()
                 ->getSearchResultsUsing(fn(string $search): array => User::where('name', 'like', "%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
                 ->getOptionLabelUsing(fn($value): ?string => User::find($value)?->name),
+            ])->columns(1)
             ]);
     }
 
