@@ -37,7 +37,7 @@ class ListPublicProposals extends ListRecords
                             if (isset($record->sid_proposal[0]))
                                 return $record->sid_proposal[0]->dosen->name;
                             else
-                                return '';
+                                return '-';
                         }
                     ),
                     Column::make('sid_proposal')->heading('Penguji 2')->formatStateUsing(
@@ -45,7 +45,7 @@ class ListPublicProposals extends ListRecords
                             if (isset($record->sid_proposal[1]))
                                 return $record->sid_proposal[1]->dosen->name;
                             else
-                                return '';
+                                return '-';
                         }
                     ),
                     Column::make('sid_proposal')->heading('Penguji 3')->formatStateUsing(
@@ -53,7 +53,7 @@ class ListPublicProposals extends ListRecords
                             if (isset($record->sid_proposal[2]))
                                 return $record->sid_proposal[2]->dosen->name;
                             else
-                                return '';
+                                return '-';
                         }
                     ),
                     Column::make('m_status_tabs_id')->heading('Status')->formatStateUsing(

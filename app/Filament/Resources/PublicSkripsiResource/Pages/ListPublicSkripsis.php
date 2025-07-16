@@ -35,7 +35,7 @@ class ListPublicSkripsis extends ListRecords
                             if (isset($record->sid_skripsi[0]))
                                 return $record->sid_skripsi[0]->dosen->name;
                             else
-                                return '';
+                                return '-';
                         }
                     ),
                     Column::make('sid_skripsi')->heading('Penguji 2')->formatStateUsing(
@@ -43,7 +43,7 @@ class ListPublicSkripsis extends ListRecords
                             if (isset($record->sid_skripsi[1]))
                                 return $record->sid_skripsi[1]->dosen->name;
                             else
-                                return '';
+                                return '-';
                         }
                     ),
                     Column::make('sid_skripsi')->heading('Penguji 3')->formatStateUsing(
@@ -51,7 +51,7 @@ class ListPublicSkripsis extends ListRecords
                             if (isset($record->sid_skripsi[2]))
                                 return $record->sid_skripsi[2]->dosen->name;
                             else
-                                return '';
+                                return '-';
                         }
                     ),
                     Column::make('m_status_tabs_id')->heading('Status')->formatStateUsing(
