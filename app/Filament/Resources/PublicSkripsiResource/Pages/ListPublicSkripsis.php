@@ -32,26 +32,26 @@ class ListPublicSkripsis extends ListRecords
                     ),
                     Column::make('sid_skripsi')->heading('Penguji 1')->formatStateUsing(
                         function ($record) {
-                            if (isset($record->sid_skripsi[0]))
-                                return $record->sid_skripsi[0]->dosen->name;
-                            else
-                                return '-';
+                            foreach ($record->sid_skripsi as $key => $value) {
+                                if ($key === 0)
+                                    return $value->dosen->name;
+                            }
                         }
                     ),
-                    Column::make('sid_skripsi')->heading('Penguji 2')->formatStateUsing(
+                    Column::make('sid_skripsi_2')->heading('Penguji 2')->formatStateUsing(
                         function ($record) {
-                            if (isset($record->sid_skripsi[1]))
-                                return $record->sid_skripsi[1]->dosen->name;
-                            else
-                                return '-';
+                            foreach ($record->sid_skripsi_2 as $key => $value) {
+                                if ($key === 0)
+                                    return $value->dosen->name;
+                            }
                         }
                     ),
-                    Column::make('sid_skripsi')->heading('Penguji 3')->formatStateUsing(
+                    Column::make('sid_skripsi_3')->heading('Penguji 3')->formatStateUsing(
                         function ($record) {
-                            if (isset($record->sid_skripsi[2]))
-                                return $record->sid_skripsi[2]->dosen->name;
-                            else
-                                return '-';
+                            foreach ($record->sid_skripsi_3 as $key => $value) {
+                                if ($key === 0)
+                                    return $value->dosen->name;
+                            }
                         }
                     ),
                     Column::make('m_status_tabs_id')->heading('Status')->formatStateUsing(

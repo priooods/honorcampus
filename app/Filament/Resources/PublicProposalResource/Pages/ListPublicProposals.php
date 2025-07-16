@@ -34,26 +34,26 @@ class ListPublicProposals extends ListRecords
                     ),
                     Column::make('sid_proposal')->heading('Penguji 1')->formatStateUsing(
                         function ($record) {
-                            if (isset($record->sid_proposal[0]))
-                                return $record->sid_proposal[0]->dosen->name;
-                            else
-                                return '-';
+                            foreach ($record->sid_proposal as $key => $value) {
+                                if ($key === 0)
+                                    return $value->dosen->name;
+                            }
                         }
                     ),
-                    Column::make('sid_proposal')->heading('Penguji 2')->formatStateUsing(
+                    Column::make('sid_proposal_2')->heading('Penguji 2')->formatStateUsing(
                         function ($record) {
-                            if (isset($record->sid_proposal[1]))
-                                return $record->sid_proposal[1]->dosen->name;
-                            else
-                                return '-';
+                            foreach ($record->sid_proposal_2 as $key => $value) {
+                                if ($key === 1)
+                                    return $value->dosen->name;
+                            }
                         }
                     ),
-                    Column::make('sid_proposal')->heading('Penguji 3')->formatStateUsing(
+                    Column::make('sid_proposal_3')->heading('Penguji 3')->formatStateUsing(
                         function ($record) {
-                            if (isset($record->sid_proposal[2]))
-                                return $record->sid_proposal[2]->dosen->name;
-                            else
-                                return '-';
+                            foreach ($record->sid_proposal_3 as $key => $value) {
+                                if ($key === 2)
+                                    return $value->dosen->name;
+                            }
                         }
                     ),
                     Column::make('m_status_tabs_id')->heading('Status')->formatStateUsing(

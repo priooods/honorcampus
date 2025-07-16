@@ -40,11 +40,27 @@ class TMahasiswaTab extends Model
     {
         return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id')->where('m_type_request_id', 1)->where('m_type_request_id_detail', 4);
     }
+    public function sid_proposal_2()
+    {
+        return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id')->where('m_type_request_id', 1)->where('m_type_request_id_detail', 4);
+    }
+    public function sid_proposal_3()
+    {
+        return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id')->where('m_type_request_id', 1)->where('m_type_request_id_detail', 4);
+    }
     public function pem_skripsi()
     {
         return $this->hasOne(THonorTab::class, 't_mahasiswa_tabs', 'id')->where('m_type_request_id', 2)->where('m_type_request_id_detail', 3);
     }
     public function sid_skripsi()
+    {
+        return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id')->where('m_type_request_id', 2)->where('m_type_request_id_detail', 4);
+    }
+    public function sid_skripsi_2()
+    {
+        return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id')->where('m_type_request_id', 2)->where('m_type_request_id_detail', 4);
+    }
+    public function sid_skripsi_3()
     {
         return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id')->where('m_type_request_id', 2)->where('m_type_request_id_detail', 4);
     }

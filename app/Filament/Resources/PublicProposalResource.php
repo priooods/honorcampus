@@ -7,11 +7,9 @@ use App\Models\MDosenTabs;
 use App\Models\THonorTab;
 use App\Models\TMahasiswaTab;
 use App\Models\TPeriodeTab;
-use App\Models\User;
 use Filament\Actions\StaticAction;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Repeater;
-use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
@@ -21,8 +19,6 @@ use Filament\Tables\Actions\Action;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
-use Illuminate\Contracts\Database\Eloquent\Builder;
-use pxlrbt\FilamentExcel\Actions\Tables\ExportBulkAction;
 
 class PublicProposalResource extends Resource
 {
