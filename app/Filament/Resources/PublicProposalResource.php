@@ -4,6 +4,7 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\PublicProposalResource\Pages;
 use App\Models\MDosenTabs;
+use App\Models\MHonorDosenTabs;
 use App\Models\THonorTab;
 use App\Models\TMahasiswaTab;
 use App\Models\TPeriodeTab;
@@ -13,6 +14,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -50,7 +52,12 @@ class PublicProposalResource extends Resource
                     ->getOptionLabelUsing(fn($value): ?string => TPeriodeTab::find($value)?->title),
                 TextInput::make('name')->label('Nama Mahasiswa')->placeholder('Masukan Nama Mahasiswa')->required(),
                 TextInput::make('nim')->label('NPM')->numeric()->placeholder('Masukan NPM')->required(),
-                TextInput::make('prodi')->label('Prodi Mahasiswa')->placeholder('Masukan Prodi Mahasiswa')->required(),
+                Select::make('prodi')
+                    ->placeholder('Pilih Prodi Mahasiswa')
+                    ->label('Prodi Mahasiswa')
+                    ->options([
+                        'Teknik Informatika' => 'Teknik Informatika',
+                    ]),
                 Select::make('status_bimbingan_proposal')
                     ->placeholder('Pilih Status Pembayaran')
                     ->label('Status Pembayaran Proposal')
@@ -152,12 +159,22 @@ class PublicProposalResource extends Resource
                             ->getOptionLabelUsing(fn($value): ?string => MDosenTabs::find($value)?->name),
                     ])
                     ->action(function (array $data, TMahasiswaTab $record): void {
+                    $findHonor = MHonorDosenTabs::where('t_periode_tabs', $record->t_periode_tabs)
+                        ->where('type', 1)->first();
+                    if (!isset($findHonor)) {
+                        Notification::make()
+                            ->title('Saved failure')
+                            ->color('danger')
+                            ->send();
+                        $this->halt();
+                    }
                         THonorTab::create([
                             't_mahasiswa_tabs' => $record->id,
                             'm_dosen_tabs_id' => $data['m_dosen_tabs_id'],
                             'm_type_request_id' => 1,
                             'm_type_request_id_detail' => 3,
                             'sequent' => 1,
+                        'honor' => $findHonor->price,
                         ]);
                         $record->update([
                         'm_status_tabs_id' => 8,
@@ -175,6 +192,7 @@ class PublicProposalResource extends Resource
                     ->label('Lanjut Sidang')
                     ->form([
                     Repeater::make('honor')
+                        ->maxItems(3)
                         ->label('Pilih Dosen yang Menguji')
                         ->simple(
                             Select::make('m_dosen_tabs_id')
@@ -193,17 +211,29 @@ class PublicProposalResource extends Resource
                         ->addActionLabel('Tambah Dosen Penguji')
                         ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
                 ])
-                    ->action(function (array $data, TMahasiswaTab $record): void {
+                    ->action(function (array $data, TMahasiswaTab $record) {
                         foreach ($data as $value) {
                             foreach ($value as $i => $item) {
-                                THonorTab::create([
-                                    't_mahasiswa_tabs' => $record->id,
-                                    'm_dosen_tabs_id' => $item,
-                                    'm_type_request_id' => 1,
-                                    'm_type_request_id_detail' => 4,
-                                'sequent' => (int)$i + 1,
-                                ]);
+                            $findHonor = MHonorDosenTabs::where('t_periode_tabs', $record->t_periode_tabs)
+                                ->where('type', ($i + 2))
+                                ->first();
+                            if (!isset($findHonor)) {
+                                Notification::make()
+                                    ->title('Saved failure')
+                                    ->color('danger')
+                                    ->body('Honor dosen belum anda lengkapi untuk periode ini')
+                                    ->send();
+                                return false;
                             }
+                                THonorTab::create([
+                                't_mahasiswa_tabs' => $record->id,
+                                'm_dosen_tabs_id' => $item,
+                                'm_type_request_id' => 1,
+                                'm_type_request_id_detail' => 4,
+                                'sequent' => (int)$i + 1,
+                                'honor' => $findHonor->price,
+                            ]);
+                        }
                         }
                         $record->update([
                             'm_status_tabs_id' => 9,
@@ -234,6 +264,7 @@ class PublicProposalResource extends Resource
                                     ->getSearchResultsUsing(fn(string $search): array => MDosenTabs::where('name', 'like', "%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
                                     ->getOptionLabelUsing(fn($value): ?string => MDosenTabs::find($value)?->name),
                             )
+                        ->maxItems(2)
                         ->defaultItems(1)
                         ->reorderable(true)
                         ->dehydrated(true)
@@ -241,24 +272,35 @@ class PublicProposalResource extends Resource
                         ->addActionLabel('Tambah Dosen Pembimbing')
                         ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
                     ])
-                    ->action(function (array $data, TMahasiswaTab $record): void {
+                    ->action(function (array $data, TMahasiswaTab $record) {
                         foreach ($data as $value) {
                             foreach ($value as $i => $item) {
-                                THonorTab::create([
-                                    't_mahasiswa_tabs' => $record->id,
-                                    'm_dosen_tabs_id' => $item,
-                                    'm_type_request_id' => 2,
-                                    'm_type_request_id_detail' => 3,
-                                    'sequent' => (int)$i + 1,
-                                ]);
+                            $findHonor = MHonorDosenTabs::where('t_periode_tabs', $record->t_periode_tabs)
+                                ->where('type', ($i + 5))->first();
+                            if (!isset($findHonor)) {
+                                Notification::make()
+                                    ->title('Saved failure')
+                                    ->color('danger')
+                                    ->body('Honor Pembimbing Skripsi belum anda lengkapi untuk periode ini')
+                                    ->send();
+                                return false;
                             }
+                            THonorTab::create([
+                                't_mahasiswa_tabs' => $record->id,
+                                'm_dosen_tabs_id' => $item,
+                                'm_type_request_id' => 2,
+                                'm_type_request_id_detail' => 3,
+                                'sequent' => (int)$i + 1,
+                                'honor' => $findHonor->price,
+                            ]);
                         }
-                        $record->update([
+                    }
+                    $record->update([
                         'm_status_tabs_id' => 10,
                         'status_bimbingan_skripsi' => 1,
                         'progres_bimbingan_skripsi' => 0,
-                        ]);
-                    })
+                    ]);
+                })
                     ->visible(fn($record) =>  $record->m_status_tabs_id === 9  && (auth()->user()->m_user_roles_id === 4 || auth()->user()->m_user_roles_id === 2))
                     ->icon('heroicon-o-check')
                     ->color('success')

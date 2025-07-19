@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\PublicSkripsiResource\Pages;
 use App\Filament\Resources\PublicSkripsiResource\RelationManagers;
 use App\Models\MDosenTabs;
+use App\Models\MHonorDosenTabs;
 use App\Models\PublicSkripsi;
 use App\Models\THonorTab;
 use App\Models\TMahasiswaTab;
@@ -15,6 +16,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Actions\Action;
@@ -101,6 +103,7 @@ class PublicSkripsiResource extends Resource
                                     ->getSearchResultsUsing(fn(string $search): array => MDosenTabs::where('name', 'like', "%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
                                     ->getOptionLabelUsing(fn($value): ?string => MDosenTabs::find($value)?->name),
                             )
+                        ->maxItems(3)
                             ->defaultItems(1)
                             ->reorderable(true)
                             ->dehydrated(true)
@@ -108,15 +111,26 @@ class PublicSkripsiResource extends Resource
                             ->addActionLabel('Tambah Dosen Penguji')
                             ->itemLabel(fn(array $state): ?string => $state['name'] ?? null)
                     ])
-                    ->action(function (array $data, TMahasiswaTab $record): void {
+                    ->action(function (array $data, TMahasiswaTab $record) {
                         foreach ($data as $value) {
                             foreach ($value as $i => $item) {
+                            $findHonor = MHonorDosenTabs::where('t_periode_tabs', $record->t_periode_tabs)
+                                ->where('type', ($i + 7))->first();
+                            if (!isset($findHonor)) {
+                                Notification::make()
+                                    ->title('Saved failure')
+                                    ->color('danger')
+                                    ->body('Honor Penguji Skripsi belum anda lengkapi untuk periode ini')
+                                    ->send();
+                                return false;
+                            }
                                 THonorTab::create([
                                     't_mahasiswa_tabs' => $record->id,
                                     'm_dosen_tabs_id' => $item,
                                     'm_type_request_id' => 2,
                                     'm_type_request_id_detail' => 4,
                                 'sequent' => (int)$i + 1,
+                                'honor' => $findHonor->price,
                                 ]);
                             }
                         }

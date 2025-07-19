@@ -30,6 +30,7 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->profile()
+            ->brandName('HONOR DOSEN')
             ->databaseTransactions()
             ->colors([
                 'primary' => Color::Amber,

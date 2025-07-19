@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\DosenResource\Pages;
 use App\Filament\Resources\DosenResource\RelationManagers;
 use App\Models\MDosenTabs;
+use App\Models\MKeahlianDosenTabs;
 use App\Models\User;
 use Filament\Actions\StaticAction;
 use Filament\Forms;
@@ -44,16 +45,23 @@ class DosenResource extends Resource
                 TextInput::make('nidn')->numeric()->label('NIDN Dosen')->placeholder('Masukan NIDN Dosen')->required()->unique(column: 'nidn')->validationMessages([
                     'unique' => 'NIDN yang anda masukan sudah terdaftar',
                 ]),
-                TextInput::make('scope')->label('Bidang Keahlian Dosen')->placeholder('Masukan Keahlian Dosen')->required(),
-            Select::make('users_id')
-                ->label('Pilih Akun Dosen')
-                ->relationship('user', 'name')
-                ->placeholder('Cari akun dosen')
-                ->options(User::where('m_user_roles_id', 3)->pluck('name', 'id'))
-                ->searchable()
-                ->required()
-                ->getSearchResultsUsing(fn(string $search): array => User::where('name', 'like', "%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
-                ->getOptionLabelUsing(fn($value): ?string => User::find($value)?->name),
+                Select::make('scope')
+                    ->label('Pilih Keahlian')
+                    ->relationship('keahlian', 'name')
+                    ->placeholder('Cari Keahlian Dosen')
+                    ->options(MKeahlianDosenTabs::pluck('name', 'id'))
+                    ->required()
+                    ->getSearchResultsUsing(fn(string $search): array => MKeahlianDosenTabs::where('name', 'like', "%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
+                    ->getOptionLabelUsing(fn($value): ?string => MKeahlianDosenTabs::find($value)?->name),
+                Select::make('users_id')
+                    ->label('Pilih Akun Dosen')
+                    ->relationship('user', 'name')
+                    ->placeholder('Cari akun dosen')
+                    ->options(User::where('m_user_roles_id', 3)->pluck('name', 'id'))
+                    ->searchable()
+                    ->required()
+                    ->getSearchResultsUsing(fn(string $search): array => User::where('name', 'like', "%{$search}%")->limit(5)->pluck('name', 'id')->toArray())
+                    ->getOptionLabelUsing(fn($value): ?string => User::find($value)?->name),
             ])->columns(1)
             ]);
     }
@@ -64,7 +72,8 @@ class DosenResource extends Resource
             ->columns([
                 TextColumn::make('name')->label('Nama Dosen'),
                 TextColumn::make('nidn')->label('NIDN Dosen'),
-                TextColumn::make('scope')->label('Keahlian Dosen'),
+            TextColumn::make('m_keahlian_dosen_tabs_id')->label('Keahlian Dosen')
+                ->getStateUsing(fn($record) => $record->keahlian ? $record->keahlian->name : '-'),
                 TextColumn::make('m_status_tabs_id')->label('Status Dosen')->badge()->color(fn(string $state): string => match ($state) {
                     'Aktif' => 'success',
                 'Tidak Aktif' => 'danger',

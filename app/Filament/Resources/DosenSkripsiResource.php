@@ -51,7 +51,13 @@ class DosenSkripsiResource extends Resource
                 ->getStateUsing(fn($record) => $record->mahasiswa ? $record->mahasiswa->name : '-'),
             TextColumn::make('nim')->label('NPM Mahasiswa')
                 ->getStateUsing(fn($record) => $record->mahasiswa ? $record->mahasiswa->nim : '-'),
-            TextColumn::make('sequent')->label('Pembimbing/Penguji'),
+            TextColumn::make('type_request')->label('Pembimbing/Penguji')
+                ->getStateUsing(function ($record) {
+                    if ($record->type_request_detail->id == 3)
+                        return $record->type_request ? 'Pembimbing ' . $record->sequent . ' ' . $record->type_request->title : '-';
+                    if ($record->type_request_detail->id == 4)
+                        return $record->type_request ? 'Penguji ' . $record->sequent . ' ' . $record->type_request_detail->title . ' ' . $record->type_request->title : '-';
+                }),
             TextColumn::make('honor')->label('Honor')
             ])
             ->filters([

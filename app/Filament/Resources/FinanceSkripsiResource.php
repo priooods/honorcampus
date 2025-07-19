@@ -40,6 +40,7 @@ class FinanceSkripsiResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->recordUrl(null)
             ->columns([
             TextColumn::make('t_periode_tabs')->label('Periode')->getStateUsing(fn($record) => $record->periode ? $record->periode->title : '-'),
             TextColumn::make('nim')->label('NPM'),

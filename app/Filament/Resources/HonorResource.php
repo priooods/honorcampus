@@ -39,14 +39,18 @@ class HonorResource extends Resource
             ]);
     }
 
-    public function getDefaultActiveTab(): string | int | null
-    {
-        return 'before';
-    }
+    // public function getDefaultActiveTab(): string | int | null
+    // {
+    //     return 'before';
+    // }
 
     public static function table(Table $table): Table
     {
-        return $table->columns([
+        return $table
+            ->query(
+                THonorTab::where('honor', '!=', 0)->orderbyDesc('id')
+            )
+            ->columns([
             TextColumn::make('m_dosen_tabs_id')->label('Nama Dosen')->getStateUsing(fn($record) => $record->dosen ? $record->dosen->name : '-'),
             TextColumn::make('mahasiswa')->label('Nama Mahasiswa')
                 ->getStateUsing(fn($record) => $record->mahasiswa ? $record->mahasiswa->name : '-')
