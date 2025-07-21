@@ -68,4 +68,9 @@ class TMahasiswaTab extends Model
     {
         return $this->hasOne(MDosenTabs::class, 'id', 'mentor_two');
     }
+
+    public function dosen_list()
+    {
+        return $this->hasMany(THonorTab::class, 't_mahasiswa_tabs', 'id');
+    }
 }
