@@ -292,6 +292,7 @@ class PublicProposalResource extends Resource
                         )
                         ->defaultItems(1)
                         ->reorderable(true)
+                        ->maxItems(2)
                         ->dehydrated(true)
                         ->reorderableWithButtons()
                         ->addActionLabel('Tambah Dosen Penguji')
@@ -353,6 +354,7 @@ class PublicProposalResource extends Resource
                                     ->getOptionLabelUsing(fn($value): ?string => MDosenTabs::find($value)?->name),
                             )
                             ->defaultItems(1)
+                        ->maxItems(2)
                             ->reorderable(true)
                             ->dehydrated(true)
                             ->reorderableWithButtons()
