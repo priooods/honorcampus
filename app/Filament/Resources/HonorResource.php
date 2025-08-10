@@ -3,20 +3,15 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\HonorResource\Pages;
-use App\Filament\Resources\HonorResource\RelationManagers;
-use App\Models\Honor;
 use App\Models\THonorTab;
 use Filament\Actions\StaticAction;
-use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
-use Filament\Tables;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class HonorResource extends Resource
 {
@@ -39,20 +34,28 @@ class HonorResource extends Resource
             ]);
     }
 
-    // public function getDefaultActiveTab(): string | int | null
-    // {
-    //     return 'before';
-    // }
-
     public static function table(Table $table): Table
     {
         return $table
             ->query(
-                THonorTab::where('honor', '!=', 0)->orderbyDesc('id')
+            THonorTab::where('honor', '!=', 0)->groupBy('t_mahasiswa_tabs')->orderbyDesc('id')
             )
+            ->recordUrl(null)
             ->columns([
-            TextColumn::make('m_dosen_tabs_id')->label('Nama Dosen')->getStateUsing(fn($record) => $record->dosen ? $record->dosen->name : '-'),
+            TextColumn::make('m_dosen_tabs_id')->label('Nama Dosen')->getStateUsing(fn($record) => $record->dosen ? $record->dosen->name : '-')
+                ->searchable(query: function (Builder $query, string $search): Builder {
+                    return $query
+                        ->with('dosen')->whereHas('dosen', function ($a) use ($search) {
+                            $a->where('name', 'like', "%{$search}%");
+                        });
+                }),
             TextColumn::make('mahasiswa')->label('Nama Mahasiswa')
+                ->searchable(query: function (Builder $query, string $search): Builder {
+                    return $query
+                        ->with('mahasiswa')->whereHas('mahasiswa', function ($a) use ($search) {
+                            $a->where('name', 'like', "%{$search}%");
+                        });
+                })
                 ->getStateUsing(fn($record) => $record->mahasiswa ? $record->mahasiswa->name : '-')
                 ->description(fn($record): string => 'NPM ' . $record->mahasiswa->nim),
             TextColumn::make('type_request')->label('Keterangan')
@@ -94,7 +97,14 @@ class HonorResource extends Resource
                 ->modalDescription('Masukan honor yang ingin diberikan untuk Dosen')
                 ->modalSubmitActionLabel('Simpan')
                 ->modalCancelAction(fn(StaticAction $action) => $action->label('Batal')),
-            Action::make('pdf')->visible(fn($record) => $record->honor !== 0)->label('Print')->icon('heroicon-o-check')->color('danger')->url(fn(THonorTab $record): string => route('pdf.report', ['id' => $record]), shouldOpenInNewTab: true)
+            Action::make('pdf')->visible(fn($record) => $record->honor !== 0)
+                ->label('Print')
+                ->icon('heroicon-o-check')
+                ->color('danger')
+                ->url(fn(THonorTab $record): string => route('pdf.report', [
+                    't_mahasiswa_tabs' => $record->t_mahasiswa_tabs,
+                    'm_dosen_tabs_id' => $record->m_dosen_tabs_id,
+                ]), shouldOpenInNewTab: true)
             ]);
     }
 

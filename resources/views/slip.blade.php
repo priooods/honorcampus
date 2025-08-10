@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Slip Gaji - {{ $data->dosen->name }}</title>
+    <title>Slip Gaji - {{ $data[0]->dosen->name }}</title>
 </head>
 <body>
     <h1 style="text-align: center; font-weight:bold; font-size: 1rem; margin-bottom: 1.5rem">Slip Honor Bimbingan & Seminar Proposal Skripsi</h1>
-    <p style="text-align: start; font-weight:bold; font-size: 15ps; margin-bottom: 1rem">{{$data->dosen->name}}</p>
+    <p style="text-align: start; font-weight:bold; font-size: 15ps; margin-bottom: 1rem">{{$data[0]->dosen->name}}</p>
     <table style="
         width: 100%; 
         border-collapse: collapse; 
@@ -38,25 +38,27 @@
             </tr>
         </thead>
         <tbody>
-            <tr>
-                <td style="
-                    padding: 8px; font-size: 15px;
-                    border: 1px solid #333;
-                ">{{ $data->mahasiswa->name }} / {{ $data->mahasiswa->nim }}</td>
-                <td style="
-                    padding: 8px; font-size: 15px;
-                    border: 1px solid #333;
-                ">{{ $data->mahasiswa->prodi }}</td>
-                <td style="
-                    padding: 8px; font-size: 15px;
-                    border: 1px solid #333;
-                ">{{ $data->type_request->title }} {{ $data->type_request_detail->title }}</td>
-                <td style="
-                    padding: 8px; font-size: 15px;
-                    border: 1px solid #333; 
-                    text-align: right;
-                ">Rp {{ $data->honor }}</td>
-            </tr>
+            @foreach ($data as $item)
+                <tr>
+                    <td style="
+                        padding: 8px; font-size: 15px;
+                        border: 1px solid #333;
+                    ">{{ $item->mahasiswa->name }} / {{ $item->mahasiswa->nim }}</td>
+                    <td style="
+                        padding: 8px; font-size: 15px;
+                        border: 1px solid #333;
+                    ">{{ $item->mahasiswa->prodi }}</td>
+                    <td style="
+                        padding: 8px; font-size: 15px;
+                        border: 1px solid #333;
+                    ">{{ $item->type_request->title }} {{ $item->type_request_detail->title }}</td>
+                    <td style="
+                        padding: 8px; font-size: 15px;
+                        border: 1px solid #333; 
+                        text-align: right;
+                    ">Rp {{ $item->honor }}</td>
+                </tr>
+            @endforeach
             <tr>
                 <td colspan="3" style="
                     padding: 8px; font-size: 15px;
@@ -69,7 +71,7 @@
                     border: 1px solid #333; 
                     text-align: right; 
                     font-weight: bold;
-                ">Rp {{ $data->honor }}</td>
+                ">Rp {{ collect($data)->sum('honor') }}</td>
             </tr>
         </tbody>
     </table>

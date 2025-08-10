@@ -11,9 +11,12 @@ class HelperController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($id)
+    public function index($t_mahasiswa_tabs, $m_dosen_tabs_id)
     {
-        $data = THonorTab::where('id', $id)->with(['mahasiswa', 'dosen', 'type_request', 'type_request_detail'])->first();
+        $data = THonorTab::where('t_mahasiswa_tabs', $t_mahasiswa_tabs)
+            ->where('m_dosen_tabs_id', $m_dosen_tabs_id)
+            ->with(['mahasiswa', 'dosen', 'type_request', 'type_request_detail'])
+            ->get();
         $pdf = LaravelMpdf::loadView('slip', compact('data'));
         return $pdf->stream('slip.pdf');
     }

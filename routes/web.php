@@ -8,4 +8,4 @@ Route::get('/', function () {
     redirect('admin');
 });
 
-Route::get('helper/pdf/{id}', [HelperController::class, 'index'])->name('pdf.report');
+Route::get('helper/pdf/{t_mahasiswa_tabs}/{m_dosen_tabs_id}', [HelperController::class, 'index'])->name('pdf.report');

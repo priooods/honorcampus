@@ -145,6 +145,21 @@ class PublicProposalResource extends Resource
             ->actions([
             ActionGroup::make([
                 Tables\Actions\EditAction::make()->visible(fn($record) =>  $record->m_status_tabs_id === 7),
+                Action::make('lunas')
+                    ->label('Lunas Pembayaran')
+                    ->action(function ($record) {
+                        $record->update([
+                            'status_bimbingan_proposal' => 1,
+                        ]);
+                    })
+                    ->visible(fn($record) =>  $record->m_status_tabs_id === 7 && $record->status_bimbingan_proposal === 0)
+                    ->icon('heroicon-o-check')
+                    ->color('success')
+                    ->requiresConfirmation()
+                    ->modalHeading('Lunas Pembayaran Proposal')
+                    ->modalDescription('Apakah Mahasiswa telah lunas melakukan pembayaran ?')
+                    ->modalSubmitActionLabel('Simpan')
+                    ->modalCancelAction(fn(StaticAction $action) => $action->label('Batal')),
                 Action::make('pengajuan')
                     ->label('Ajukan Mahasiswa')
                     ->action(function ($record) {
@@ -152,7 +167,7 @@ class PublicProposalResource extends Resource
                             'm_status_tabs_id' => 5,
                         ]);
                     })
-                    ->visible(fn($record) =>  $record->m_status_tabs_id === 7)
+                    ->visible(fn($record) =>  $record->m_status_tabs_id === 7 && $record->status_bimbingan_proposal === 1)
                     ->icon('heroicon-o-check')
                     ->color('success')
                     ->requiresConfirmation()
